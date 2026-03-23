@@ -6,34 +6,42 @@ import java.io.FileReader;
 
 public class CerealRunner
 {
-    // create a private instance variable to store an ArrayList of Cereal objects
+    private ArrayList<Cereal> cereals;
 
     public CerealRunner(String fileName)
     {
-        // instantiate the ArrayList
+        cereals = new ArrayList<Cereal>();
 
         try
         {
             FileReader fileRdr = new FileReader(fileName);
             Scanner scan = new Scanner(fileRdr);
-            while(scan.hasNext())
+
+            if (scan.hasNextLine())
             {
-                String myStr = scan.nextLine();
-
-                // use the split method to parse the data into an array of
-                //   String objects
-
-                // go through each String array element and save it
-                //   into the appropriate variable which will be used to
-                //   create a Cereal object
-
-                // create a new Cereal object, and add it to the ArrayList
-
+                scan.nextLine();
             }
+
+            while (scan.hasNextLine())
+            {
+                String line = scan.nextLine();
+
+                String[] data = line.split(",");
+
+                String name = data[0].trim();
+                int calories = Integer.parseInt(data[1].trim());
+                double fiber = Double.parseDouble(data[2].trim());
+                double carbs = Double.parseDouble(data[3].trim());
+                double cups = Double.parseDouble(data[4].trim());
+
+                Cereal cereal = new Cereal(name, calories, fiber, carbs, cups);
+
+                cereals.add(cereal);
+            }
+
             scan.close();
-
-
-        } catch (FileNotFoundException e)
+        }
+        catch (FileNotFoundException e)
         {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -46,8 +54,6 @@ public class CerealRunner
     public static void main(String[] args)
     {
         String fileName = "src/data/cerealSubset.csv";
-        CerealRunner cr = new CerealRunner(fileName);
+        new CerealRunner(fileName);
     }
-
 }
-
